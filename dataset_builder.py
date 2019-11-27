@@ -7,7 +7,8 @@ import cv2
 def read_faces(base_path_celeb):
     count = 0
     celeb_faces = []
-    max_imgs = 5000
+    clean_faces = []
+    max_imgs = 100000
     print('celeb_faces')
     for filename in Path(base_path_celeb).glob('**/*.jpg'):
         if count < max_imgs:
@@ -22,10 +23,17 @@ def read_faces(base_path_celeb):
                     continue
 
                 resized = (resized / 255)
-                celeb_faces.append(resized)
+                resized = (resized - np.amin(resized)) / \
+                    (np.amax(resized) - np.amin(resized))
+                noisy = resized + np.random.normal(0, 0.5, (128, 128, 3))
+                noisy = (noisy - np.amin(noisy)) / \
+                    (np.amax(noisy) - np.amin(noisy))
+
+                clean_faces.append(resized)
+                celeb_faces.append(noisy)
                 count += 1
             except Exception as e:
                 print(e)
         else:
             break
-    return np.array(celeb_faces)
+    return np.array(celeb_faces), np.array(clean_faces)
