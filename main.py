@@ -12,7 +12,7 @@ def test_model_denoising(name):
         model = load_model('./outputs/dnet_denoising_model.h5')
     elif name == 'unet':
         model = load_model('./outputs/unet_denoising_model.h5')
-    img_orig = np.array(Image.open('lenna.png'))
+    img_orig = np.array(Image.open('lenna.jpg'))
     resized = (cv2.resize(
         img_orig, (128, 128), interpolation=cv2.INTER_AREA) / 255)
     resized = (resized - np.amin(resized)) / \
@@ -75,5 +75,5 @@ def train_model_denoising(name):
 
 
 if __name__ == "__main__":
-    train_model_denoising('dnet')
-    # test_model_denoising('dnet')
+    # train_model_denoising('dnet')
+    test_model_denoising('dnet')
